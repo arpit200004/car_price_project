@@ -7,32 +7,39 @@ def generate_symmetric_cars(n_samples=5000):
     np.random.seed(42)
     random.seed(42)
 
-    # Dictionary of modern 2023-2024 Indian cars with base specs
+    # Dictionary of modern 2023-2024 Indian cars with base specs & variants
     models = [
-        {"brand": "Tata", "model": "Tata Punch", "body": "suv", "fuel": "petrol", "engine": "1199 cc", "power": "86.63 bhp", "torque": "115 Nm", "seats": 5, "length": "3827", "width": "1742", "height": "1615", "price_base": 700000},
-        {"brand": "Tata", "model": "Tata Nexon", "body": "suv", "fuel": "petrol", "engine": "1198 cc", "power": "118.27 bhp", "torque": "170 Nm", "seats": 5, "length": "3993", "width": "1811", "height": "1606", "price_base": 1100000},
-        {"brand": "Tata", "model": "Tata Nexon", "body": "suv", "fuel": "diesel", "engine": "1497 cc", "power": "113.31 bhp", "torque": "260 Nm", "seats": 5, "length": "3993", "width": "1811", "height": "1606", "price_base": 1300000},
-        {"brand": "Tata", "model": "Tata Safari", "body": "suv", "fuel": "diesel", "engine": "1956 cc", "power": "167.62 bhp", "torque": "350 Nm", "seats": 7, "length": "4668", "width": "1922", "height": "1795", "price_base": 2200000},
+        {"brand": "Tata", "model": "Tata Punch", "body": "suv", "fuel": "petrol", "engine": "1199 cc", "power": "86.63 bhp", "torque": "115 Nm", "seats": 5, "length": "3827", "width": "1742", "height": "1615", "price_base": 700000, 
+         "variants": ["Pure", "Adventure", "Accomplished", "Creative"]},
+        {"brand": "Tata", "model": "Tata Nexon", "body": "suv", "fuel": "petrol", "engine": "1198 cc", "power": "118.27 bhp", "torque": "170 Nm", "seats": 5, "length": "3993", "width": "1811", "height": "1606", "price_base": 1100000,
+         "variants": ["Smart", "Pure", "Creative", "Fearless"]},
+        {"brand": "Tata", "model": "Tata Safari", "body": "suv", "fuel": "diesel", "engine": "1956 cc", "power": "167.62 bhp", "torque": "350 Nm", "seats": 7, "length": "4668", "width": "1922", "height": "1795", "price_base": 2200000,
+         "variants": ["Smart", "Pure", "Adventure", "Accomplished"]},
         
-        {"brand": "Maruti", "model": "Maruti Fronx", "body": "suv", "fuel": "petrol", "engine": "1197 cc", "power": "88.50 bhp", "torque": "113 Nm", "seats": 5, "length": "3995", "width": "1765", "height": "1550", "price_base": 950000},
-        {"brand": "Maruti", "model": "Maruti Grand Vitara", "body": "suv", "fuel": "petrol", "engine": "1462 cc", "power": "101.64 bhp", "torque": "136.8 Nm", "seats": 5, "length": "4345", "width": "1795", "height": "1645", "price_base": 1500000},
-        {"brand": "Maruti", "model": "Maruti Brezza", "body": "suv", "fuel": "petrol", "engine": "1462 cc", "power": "101.65 bhp", "torque": "136.8 Nm", "seats": 5, "length": "3995", "width": "1790", "height": "1685", "price_base": 1200000},
-        {"brand": "Maruti", "model": "Maruti Jimny", "body": "suv", "fuel": "petrol", "engine": "1462 cc", "power": "103.39 bhp", "torque": "134.2 Nm", "seats": 4, "length": "3985", "width": "1645", "height": "1720", "price_base": 1400000},
-        {"brand": "Maruti", "model": "Maruti Invicto", "body": "muv", "fuel": "petrol", "engine": "1987 cc", "power": "150.19 bhp", "torque": "188 Nm", "seats": 7, "length": "4755", "width": "1850", "height": "1790", "price_base": 3000000},
+        {"brand": "Maruti", "model": "Maruti Fronx", "body": "suv", "fuel": "petrol", "engine": "1197 cc", "power": "88.50 bhp", "torque": "113 Nm", "seats": 5, "length": "3995", "width": "1765", "height": "1550", "price_base": 950000,
+         "variants": ["Sigma", "Delta", "Delta+", "Zeta", "Alpha"]},
+        {"brand": "Maruti", "model": "Maruti Grand Vitara", "body": "suv", "fuel": "petrol", "engine": "1462 cc", "power": "101.64 bhp", "torque": "136.8 Nm", "seats": 5, "length": "4345", "width": "1795", "height": "1645", "price_base": 1500000,
+         "variants": ["Sigma", "Delta", "Zeta", "Alpha"]},
+        {"brand": "Maruti", "model": "Maruti Brezza", "body": "suv", "fuel": "petrol", "engine": "1462 cc", "power": "101.65 bhp", "torque": "136.8 Nm", "seats": 5, "length": "3995", "width": "1790", "height": "1685", "price_base": 1200000,
+         "variants": ["LXi", "VXi", "ZXi", "ZXi+"]},
         
-        {"brand": "Hyundai", "model": "Hyundai Exter", "body": "suv", "fuel": "petrol", "engine": "1197 cc", "power": "81.80 bhp", "torque": "113.8 Nm", "seats": 5, "length": "3815", "width": "1710", "height": "1631", "price_base": 850000},
-        {"brand": "Hyundai", "model": "Hyundai Creta", "body": "suv", "fuel": "petrol", "engine": "1497 cc", "power": "113.18 bhp", "torque": "143.8 Nm", "seats": 5, "length": "4330", "width": "1790", "height": "1635", "price_base": 1600000},
-        {"brand": "Hyundai", "model": "Hyundai Verna", "body": "sedan", "fuel": "petrol", "engine": "1482 cc", "power": "157.57 bhp", "torque": "253 Nm", "seats": 5, "length": "4535", "width": "1765", "height": "1475", "price_base": 1700000},
+        {"brand": "Hyundai", "model": "Hyundai Exter", "body": "suv", "fuel": "petrol", "engine": "1197 cc", "power": "81.80 bhp", "torque": "113.8 Nm", "seats": 5, "length": "3815", "width": "1710", "height": "1631", "price_base": 850000,
+         "variants": ["EX", "S", "SX", "SX (O)"]},
+        {"brand": "Hyundai", "model": "Hyundai Creta", "body": "suv", "fuel": "petrol", "engine": "1497 cc", "power": "113.18 bhp", "torque": "143.8 Nm", "seats": 5, "length": "4330", "width": "1790", "height": "1635", "price_base": 1600000,
+         "variants": ["E", "EX", "S", "SX", "SX (O)"]},
         
-        {"brand": "Mahindra", "model": "Mahindra Scorpio-N", "body": "suv", "fuel": "diesel", "engine": "2198 cc", "power": "172.45 bhp", "torque": "400 Nm", "seats": 7, "length": "4662", "width": "1917", "height": "1857", "price_base": 2400000},
-        {"brand": "Mahindra", "model": "Mahindra XUV700", "body": "suv", "fuel": "petrol", "engine": "1997 cc", "power": "197.13 bhp", "torque": "380 Nm", "seats": 7, "length": "4695", "width": "1890", "height": "1755", "price_base": 2300000},
-        {"brand": "Mahindra", "model": "Mahindra Thar", "body": "suv", "fuel": "diesel", "engine": "2184 cc", "power": "130 bhp", "torque": "300 Nm", "seats": 4, "length": "3985", "width": "1820", "height": "1844", "price_base": 1800000},
+        {"brand": "Mahindra", "model": "Mahindra Scorpio-N", "body": "suv", "fuel": "diesel", "engine": "2198 cc", "power": "172.45 bhp", "torque": "400 Nm", "seats": 7, "length": "4662", "width": "1917", "height": "1857", "price_base": 2400000,
+         "variants": ["Z2", "Z4", "Z6", "Z8", "Z8L"]},
+        {"brand": "Mahindra", "model": "Mahindra XUV700", "body": "suv", "fuel": "petrol", "engine": "1997 cc", "power": "197.13 bhp", "torque": "380 Nm", "seats": 7, "length": "4695", "width": "1890", "height": "1755", "price_base": 2300000,
+         "variants": ["MX", "AX3", "AX5", "AX7", "AX7L"]},
+        {"brand": "Mahindra", "model": "Mahindra Thar", "body": "suv", "fuel": "diesel", "engine": "2184 cc", "power": "130 bhp", "torque": "300 Nm", "seats": 4, "length": "3985", "width": "1820", "height": "1844", "price_base": 1800000,
+         "variants": ["AX (O)", "LX"]},
         
-        {"brand": "Kia", "model": "Kia Seltos", "body": "suv", "fuel": "petrol", "engine": "1482 cc", "power": "157.81 bhp", "torque": "253 Nm", "seats": 5, "length": "4365", "width": "1800", "height": "1645", "price_base": 1700000},
-        {"brand": "Kia", "model": "Kia Carens", "body": "muv", "fuel": "diesel", "engine": "1493 cc", "power": "114.41 bhp", "torque": "250 Nm", "seats": 7, "length": "4540", "width": "1800", "height": "1708", "price_base": 1800000},
+        {"brand": "Kia", "model": "Kia Seltos", "body": "suv", "fuel": "petrol", "engine": "1482 cc", "power": "157.81 bhp", "torque": "253 Nm", "seats": 5, "length": "4365", "width": "1800", "height": "1645", "price_base": 1700000,
+         "variants": ["HTE", "HTK", "HTX", "HTX+", "GTLine"]},
         
-        {"brand": "Toyota", "model": "Toyota Hyryder", "body": "suv", "fuel": "petrol", "engine": "1490 cc", "power": "91.18 bhp", "torque": "122 Nm", "seats": 5, "length": "4365", "width": "1795", "height": "1645", "price_base": 1800000},
-        {"brand": "Toyota", "model": "Toyota Innova Hycross", "body": "muv", "fuel": "petrol", "engine": "1987 cc", "power": "183.72 bhp", "torque": "188 Nm", "seats": 7, "length": "4755", "width": "1845", "height": "1795", "price_base": 3000000},
+        {"brand": "Toyota", "model": "Toyota Innova Hycross", "body": "muv", "fuel": "petrol", "engine": "1987 cc", "power": "183.72 bhp", "torque": "188 Nm", "seats": 7, "length": "4755", "width": "1845", "height": "1795", "price_base": 3000000,
+         "variants": ["GX", "VX", "ZX", "ZX (O)"]},
     ]
 
     records = []
@@ -61,6 +68,9 @@ def generate_symmetric_cars(n_samples=5000):
         seller = random.choices(["dealer", "individual"], weights=[0.75, 0.25])[0]
         trans = random.choices(["manual", "automatic"], weights=[0.6, 0.4])[0]
         
+        # Pick real variant
+        variant = random.choice(car["variants"])
+        
         # Mileage varies slightly around 15-22 kmpl
         mileage = f"{random.uniform(15.0, 22.0):.2f} kmpl"
         
@@ -68,7 +78,7 @@ def generate_symmetric_cars(n_samples=5000):
         row = {
             "brand_name": car["brand"],
             "model_new": car["model"],
-            "variant_name": f"{car['model']} VXI", # Dummy variant
+            "variant_name": f"{car['model']} {variant}", 
             "seller_type_new": seller,
             "fuel_type": car["fuel"],
             "transmission_type_new": trans,

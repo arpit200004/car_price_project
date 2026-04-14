@@ -33,8 +33,8 @@ def clean_text(series: pd.Series) -> pd.Series:
 #  Research shows Indian used car transaction prices
 #  average ~8% below the listed/asking price.
 # ────────────────────────────────────────────────
-DEALER_DISCOUNT    = 0.85   # dealer listings: apply heavier markdown
-INDIVIDUAL_DISCOUNT = 0.90  # individual listings: apply heavier markdown
+DEALER_DISCOUNT    = 0.90   # dealer listings: 10% markdown (balanced)
+INDIVIDUAL_DISCOUNT = 0.95  # individual listings: 5% markdown (balanced)
 
 
 def load_market_data() -> pd.DataFrame:
@@ -148,8 +148,9 @@ def load_market_data() -> pd.DataFrame:
 
     # ── Step 5.1: 2024 Inflation Normalization ───────────────────────
     # The CarDekho data is mostly from 2021. New and used car prices have 
-    # We are removing inflation scaling to lower the overall projected price.
-    annual_inflation = 1.00
+    # We are using a balanced inflation scaling to hit the 'goldilocks' pricing zone
+    # between historic lows and aggressive modern bounds.
+    annual_inflation = 1.025
     df["price"] = df["price"] * (annual_inflation ** (2024 - df["listing_year"]))
 
     # ── Step 6: engineered features ──────────────────────────────────
