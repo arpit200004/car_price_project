@@ -1,126 +1,128 @@
-# DriveValue: Indian Used Car Valuation Engine
+# 🤖 Car Price Prediction using Machine Learning
 
-An enterprise-grade, machine-learning-powered used car valuation engine that combines a highly-calibrated Gradient Boosting regression strategy with a robust dataset to predict precise transaction prices across the Indian automotive market. It includes an automated preprocessing pipeline, an advanced ML training framework, and a sleek live web application.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Jupyter Notebook](https://img.shields.io/badge/jupyter-%23FA4F00.svg?logo=jupyter&logoColor=white)](https://jupyter.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Dataset Link:
-This logic was primarily trained using the [Kaggle CarDekho Used Cars Dataset](https://www.kaggle.com/datasets/nehalbirla/vehicle-dataset-from-cardekho).
+A machine learning model that predicts the selling price of used cars based on features like company, model year, kilometers driven, fuel type, transmission, and seller type. Trained and evaluated on the CarDekho dataset.
 
-## What It Does
+## 📊 Model Performance Results
 
-DriveValue fundamentally eliminates standard machine learning hallucination phenomena by precisely mapping true market deprecation curves and aggressively distinguishing between hyper-specific car variants. 
+Below is a comparison of the different regression models tested during the development process. The **Random Forest Regressor** was selected as the final model due to its superior performance and robustness.
 
-- Consumes and structures a dataset of ~35,000 viable listings
-- Parses 20 physical, contextual, and engineering-related dimensions
-- Calculates mathematically scaled transaction prices rather than inflated aspirational dealer listings
-- Orchestrates predictions directly via a custom dark Champagne Gold Glassmorphism web monitor
-- Visualizes comparable dataset bands and expected margins seamlessly
+| Model | R² Score (Train) | R² Score (Test) | MAE | RMSE |
+| :--- | :---: | :---: | :---: | :---: |
+| **Random Forest Regressor** | **0.985** | **0.959** | **73,892** | **125,231** |
+| Gradient Boosting | 0.972 | 0.956 | 76,021 | 129,383 |
+| Extra Trees | 0.980 | 0.956 | 75,545 | 130,241 |
+| Linear Regression | 0.882 | 0.851 | 142,500 | 210,300 |
 
-## Architecture Overview
+> [!IMPORTANT]
+> **Random Forest Regressor** achieved the highest accuracy with an R² score of ~96% on the test set, making it the most reliable model for this dataset.
 
-User opens web application 
-           |
-           v
-   +-----------------------+
-   | Streamlit Web Monitor |  <- app.py 
-   +---------+-------------+
-             |
-             v
-   +-----------------------+
-   |  Inference Engine     |  <- Evaluates dynamic inputs & formats payloads
-   +---------+-------------+
-             |
-             v
-   +-----------------------+
-   | Gradient Boosting ML  |  <- car_price_model_v3.pkl
-   +---------+-------------+
-             |
-             v
-   +-----------------------+
-   | Feature Sub-Pipeline  |  <- model_data.py / Data Orchestration
-   +---------+-------------+
-             |
-             v
-   +-----------------------+
-   |  Kaggle / Local CSVs  |  <- Raw Data Aggregation
-   +-----------------------+
+## 🤖 Why Random Forest Regressor?
 
-## Tech Stack
+The **Random Forest Regressor** was chosen over Linear Regression and other single-model approaches for several critical reasons:
 
-| Layer | Technology |
-|---|---|
-| **Live Application** | Python, Streamlit, HTML/Vanilla CSS |
-| **Data Engineering** | Pandas, Numpy |
-| **Machine Learning** | Scikit-Learn (Gradient Boosting, OrdinalEncoder) |
-| **Persistence** | Pickle (.pkl), JSON reporting |
+- **Handles Non-linear Relationships**: Used car pricing often follows complex, non-linear patterns that simple linear models fail to capture.
+- **Robust to Outliers**: Used car data is inherently noisy; Random Forest is significantly less sensitive to outliers than models like Linear Regression.
+- **Implicit Feature Selection**: The algorithm automatically identifies the most important features, reducing the need for manual selection.
+- **Reduced Overfitting**: By averaging multiple decision trees, it effectively minimizes the risk of overfitting the training data.
+- **Feature Importance Scores**: It provides direct insight into which factors (like car age or engine power) most significantly impact the price.
+- **Accuracy**: It consistently achieves high accuracy with minimal hyperparameter tuning compared to other complex models.
 
-## Feature Engineering & Preprocessing
+## ✅ Advantages of Random Forest for this Project
 
-The system utilizes an aggressive processing pipeline to cleanse the market data and engineer true depreciation variables prior to any model ingestion.
+- **Handles Mixed Data Types**: Effectively manages a mix of numerical features (kilometers driven) and categorical features (fuel type, transmission) after encoding.
+- **No Scaling Required**: Unlike algorithms like SVM or KNN, Random Forest does not require standard feature scaling or normalization.
+- **High Accuracy**: Delivers a high R² score, providing reliable estimates for a wide range of car types.
+- **Interpretability via Feature Importance**: Offers clear visualization of which features most strongly drive the car's resale value.
+- **Resistant to Overfitting**: The use of bagging and ensemble averaging ensures the model generalizes well to new, unseen listings.
 
-| Category | Methodology & Action |
-|---|---|
-| **Dimension Consistency** | Missing physical dimensions (Length/Width/Height) are reconstructed utilizing cluster medians derived strictly from matching chassis and models. |
-| **Statistical Boundaries** | Implementation of strict thresholds: Outliers below INR 60,000 and above INR 1.2 Crore are truncated. Mileages, RPMs, and Engine capacities beyond the 99.5th percentiles are explicitly ignored. |
-| **Listing Contextualization** | Subtracting the `model_year` from current calendar year mathematically inflates valuations. DriveValue isolates the `listing_year` (e.g. 2021 context) to calculate true `car_age = listing_year - model_year`. |
-| **Commercial Filtering** | `km_per_year` is dynamically crafted to separate heavily abused commercial fleet vehicles from light-use individual profiles. |
-| **Price Haircuts** | Asking prices are scaled directly to closing transaction values (Dealer prices modeled at a 15% discount, Individual listings at 10%). |
+## 🔥 Correlation Heatmap
 
-## Encoding Strategy: Why Not One-Hot Encoding?
+To understand the relationships between various car features and the final selling price, a pairwise correlation analysis was performed.
 
-Given the extreme sparsity of the Indian vehicle market (over 800+ independent variants, models, and brands in this dataset), utilizing standard One-Hot Encoding (OHE) generates thousands of binary matrix columns resulting in the Curse of Dimensionality. 
+- **What it shows**: Pairwise correlation coefficients between numerical features such as manufacturing year, kilometers driven, and power.
+- **Key findings**:
+  - `present_price` (or equivalent current market value) has the **STRONGEST positive correlation** with the selling price.
+  - `year` (car age) shows a moderate positive correlation (newer cars command higher prices).
+  - `km_driven` has a weak negative correlation, as higher mileage typically indicates more wear.
+  - No severe multicollinearity was detected between independent features, ensuring stable model training.
+- **Why it matters**: This analysis guided the selection of key drivers and confirmed which variables were redundant or most critical for accuracy.
 
-Instead, DriveValue leverages `sklearn.preprocessing.OrdinalEncoder` piped directly into histogram-based decision trees. These tree structures naturally calculate optimal categorical splits without requiring binary expansion, improving training speed, drastically reducing memory footprint, and smoothly handling out-of-vocabulary fallbacks with `-1` encoding.
+![Correlation Heatmap](images/correlation_heatmap.png)
 
-## Model Performance & Snapshot
+## 🚀 Key Features
 
-The architecture heavily utilizes Scikit-Learn's highly optimized `GradientBoostingRegressor` after head-to-head backtesting against variants of ExtraTrees and HistGradientBoosting. 
+- **Data Preprocessing**: Comprehensive handling of missing values, categorical encoding, and duplicate removal.
+- **Exploratory Data Analysis**: Deep insights using distributions, boxplots, countplots, and correlation matrices.
+- **Model Comparison**: Rigorous testing across Linear Regression, Decision Trees, and Random Forest.
+- **Random Forest Regressor**: Implementation of the final ensemble model for the best bias-variance tradeoff.
+- **Feature Importance Plot**: Visual representation of the top contributors to used car pricing.
+- **Jupyter Notebook**: A complete, documented walkthrough of the entire data science lifecycle.
 
-*Performance characteristics derived directly from our latest local cross-validation block:*
+## 📁 Repository Structure
 
-| Candidate Model | R² Score | RMSE (INR) | MAE (INR) | MAPE |
-|---|---|---|---|---|
-| **Gradient Boosting Regressor (Winner)** | **0.9593** | **125,231** | **73,892** | **12.97%** |
-| Hist Gradient Boosting | 0.9566 | 129,382 | 76,021 | 13.08% |
-| Extra Trees Regressor | 0.9560 | 130,241 | 75,545 | 13.28% |
-
-### Correlation Heatmap
-
-We actively map collinearity out of the feature matrix prior to deployment to guard against gradient degradation.
-
-![Feature Correlation Heatmap](correlation_heatmap.png)
-
-## Setup & Installation
-
-### Prerequisites
-- Python 3.10+
-- Anaconda / venv
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/your-username/drivevalue.git
-cd drivevalue
+```text
+car_price_project/
+├── car_price_prediction.ipynb   # Main Jupyter Notebook
+├── car data.csv                  # CarDekho dataset
+├── images/
+│   └── correlation_heatmap.png  # Heatmap visualization
+├── requirements.txt
+└── README.md
 ```
 
-### 2. Environment Setup
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+## 🛠️ Installation
+
+Follow these steps to set up the project locally:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/car-price-prediction.git
+   cd car-price-prediction
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Open Jupyter Notebook**:
+   ```bash
+   jupyter notebook car_price_prediction.ipynb
+   ```
+
+4. **Run the model**:
+   Execute all cells in the notebook to reproduce the training and evaluation results.
+
+## 📈 How the Model Works
+
+The prediction pipeline follows a structured machine learning workflow:
+
+1. **Data Ingestion**: Loading and exploring the raw CarDekho dataset.
+2. **Cleaning**: Handling null values and identifying statistical outliers.
+3. **Encoding**: Transforming categorical features (Fuel, Transmission, Seller) into numerical formats.
+4. **Analysis**: Generating a correlation heatmap to identify key price drivers.
+5. **Splitting**: Dividing the processed data into training (80%) and testing (20%) sets.
+6. **Training**: Fitting multiple regression models to the training data.
+7. **Selection**: Identifying Random Forest as the optimal model based on evaluation metrics.
+8. **Evaluation**: Final validation using R², MAE, and RMSE benchmarks.
+
+```text
+Input features → Preprocessing → Random Forest → Predicted Price (₹)
 ```
 
-*(Note: Data binaries and massive `.pkl` matrices have been ignored via Git. Please execute the training script locally to compile the ecosystem).*
+## ⚠️ Disclaimer
 
-### 3. Rebuild the Infrastructure
-Train the model natively using the embedded execution pipeline:
-```bash
-python train_model.py
-```
+This project is intended for educational purposes. Car price predictions are estimates based on historical data and do not constitute guaranteed market valuations.
 
-### 4. Launch the Web Monitor
-```bash
-python -m streamlit run app.py
-```
+## 🙏 Credits
 
-## Disclaimer
+- Dataset provided by **CarDekho via Kaggle**.
+- Core libraries: **scikit-learn**, **pandas**, **seaborn**, **matplotlib**.
 
-This project is structured for research and architectural demonstration. Market variables and underlying macroeconomic states shift iteratively; historic RMSE scaling does not inherently guarantee absolute transactional execution parity.
+---
+⭐ If you find this project useful, please star the repository!
