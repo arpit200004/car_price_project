@@ -7,7 +7,7 @@ import pandas as pd
 
 
 DATA_FILE = Path("data/used-cars-dataset-cardekho/cars_details_merges.csv.gz")
-SYNTHETIC_FILE = Path("data/synthetic_2024_cars.csv")
+SYNTHETIC_FILE = Path("data/synthetic_2026_cars.csv")
 
 
 def extract_first_number(series: pd.Series) -> pd.Series:
@@ -41,10 +41,10 @@ def load_market_data() -> pd.DataFrame:
     raw_main = pd.read_csv(DATA_FILE, low_memory=False)
     raw_main["listing_year"] = 2021
     
-    # ── Inject Modern 2023-2024 Cars ──
+    # ── Inject Modern 2025-2026 Cars ──
     try:
         raw_synth = pd.read_csv(SYNTHETIC_FILE, low_memory=False)
-        raw_synth["listing_year"] = 2024
+        raw_synth["listing_year"] = 2026
         raw = pd.concat([raw_main, raw_synth], ignore_index=True)
     except FileNotFoundError:
         raw = raw_main
@@ -116,7 +116,7 @@ def load_market_data() -> pd.DataFrame:
     df = df[
         df["price_raw"].between(60_000, price_cap)
         & df["km_driven"].between(500, km_cap)
-        & df["model_year"].between(2000, 2024)    # tighter: pre-2000 cars are rare & noisy
+        & df["model_year"].between(2000, 2026)    # tighter: pre-2000 cars are rare & noisy
         & df["mileage"].between(5, 35)             # tighter upper: >35kmpl is implausible for most cars
         & df["engine_cc"].between(500, 6_500)
         & df["max_power"].between(25, power_cap)
@@ -146,18 +146,17 @@ def load_market_data() -> pd.DataFrame:
     round_mask = df["is_round_price"] == 1
     df.loc[round_mask, "price"] *= 0.98
 
-    # ── Step 5.1: 2024 Inflation Normalization ───────────────────────
-    # The CarDekho data is mostly from 2021. New and used car prices have 
-    # We are using a balanced inflation scaling to hit the 'goldilocks' pricing zone
-    # between historic lows and aggressive modern bounds.
-    # 5.5% annual scaling is the final calibration point to meet market benchmarks.
-    annual_inflation = 1.055
-    df["price"] = df["price"] * (annual_inflation ** (2024 - df["listing_year"]))
+    # ── Step 5.1: 2026 Inflation Normalization ───────────────────────
+    # The CarDekho data is mostly from 2021.
+    # To hit the 2026 market "Goldilocks" zone without exponential explosion,
+    # we cool the inflation rate to 3.5% annually over the 5-year gap.
+    annual_inflation = 1.035
+    df["price"] = df["price"] * (annual_inflation ** (2026 - df["listing_year"]))
 
     # ── Step 6: engineered features ──────────────────────────────────
     # Calculate the age at the time of listing, NOT the age today!
     # This teaches the model the true depreciation curve.
-    df["car_age"]    = df["listing_year"] - df["model_year"]
+    df["car_age"] = 2026 - df["model_year"]
     df["km_per_year"] = df["km_driven"] / df["car_age"].clip(lower=1)
 
     # Remove implausibly high km_per_year (>40k km/year is likely data error)

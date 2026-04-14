@@ -1,7 +1,7 @@
 {
   "data_file": "data/used-cars-dataset-cardekho/cars_details_merges.csv.gz",
   "dataset_name": "Kaggle Cardekho detailed used cars dataset (calibrated)",
-  "training_rows": 35717,
+  "training_rows": 36550,
   "feature_columns": [
     "brand",
     "model",
@@ -27,31 +27,31 @@
   "selected_model_name": "gradient_boosting_regressor",
   "candidate_metrics": {
     "hist_gradient_boosting": {
-      "mae": 96255.51258226228,
-      "mape": 13.068089400194111,
-      "median_ape": 9.402565987468709,
-      "median_ae": 60339.922332266404,
-      "rmse": 167305.62666132004,
-      "r2": 0.9499335479888762,
-      "bias": -8417.509399538607
+      "mae": 94844.1131500144,
+      "mape": 12.918953343738806,
+      "median_ape": 9.25048368310168,
+      "median_ae": 60774.35663608351,
+      "rmse": 163337.95691321784,
+      "r2": 0.9541079420424884,
+      "bias": -12245.482853502122
     },
     "gradient_boosting_regressor": {
-      "mae": 93046.8055687409,
-      "mape": 12.92622413465089,
-      "median_ape": 9.200045998815973,
-      "median_ae": 58948.481843841524,
-      "rmse": 162293.32077068355,
-      "r2": 0.9528884909715094,
-      "bias": -7716.353371460697
+      "mae": 94263.33045155558,
+      "mape": 12.872613254056326,
+      "median_ape": 9.05295024109619,
+      "median_ae": 59864.22101969304,
+      "rmse": 169571.48445520605,
+      "r2": 0.9505383113254329,
+      "bias": -10751.044773300706
     },
     "extra_trees_regressor": {
-      "mae": 95875.24471000403,
-      "mape": 13.24662229876544,
-      "median_ape": 9.482264647424707,
-      "median_ae": 59506.25122018991,
-      "rmse": 166966.76893502806,
-      "r2": 0.9501361499422253,
-      "bias": -12211.499928817204
+      "mae": 96403.80463122508,
+      "mape": 13.092385321921029,
+      "median_ape": 9.200704450037072,
+      "median_ae": 60156.28031441156,
+      "rmse": 174026.1143904247,
+      "r2": 0.9479054678130356,
+      "bias": -14952.480649826319
     }
   }
 }

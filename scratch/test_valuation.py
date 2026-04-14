@@ -25,7 +25,7 @@ row = pd.DataFrame([{
     "owner_type": "first",
     "body_type": "suv",
     "drive_type": "fwd",
-    "car_age": float(2024 - 2017),
+    "car_age": float(2026 - 2017),
     "km_driven": 120000.0,
     "km_per_year": 120000.0 / 7,
     "mileage": 24.3, # typical

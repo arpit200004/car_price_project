@@ -400,10 +400,8 @@ def main():
         <div class="step">
             <div class="snum c1">6</div>
             <h4>Feature Engineering &amp; Training</h4>
-            <p>We compute <code>car_age</code> (2024 − year) and <code>km_per_year</code> (km ÷ age)
-               to capture depreciation and usage intensity. Price is log-transformed (<code>log1p</code>).
-               Three models compete — GradientBoosting (800 trees), ExtraTrees (500), RandomForest (500) —
-               on an 80/20 split. The winner is picked by lowest MAPE.</p>
+            <p>We compute <code>car_age</code> (2026 − year) and <code>km_per_year</code> (km ÷ age)
+               to capture depreciation and usage intensity. Price is log-transformed (<code>log1p</code>).</p>
         </div>
     </div>""", unsafe_allow_html=True)
 
@@ -457,7 +455,7 @@ def main():
             go = st.form_submit_button("Estimate price", width="stretch")
 
         if go:
-            car_age = max(2024 - reg_year, 1)
+            car_age = max(2026 - reg_year, 1)
             km_val = float(km)
             row = pd.DataFrame([{
                 "brand": cur_brand, "model": cur_model, "car_name": cur_variant,
