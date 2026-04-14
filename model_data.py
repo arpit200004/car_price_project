@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 
-DATA_FILE = Path("data/used-cars-dataset-cardekho/cars_details_merges.csv")
+DATA_FILE = Path("data/used-cars-dataset-cardekho/cars_details_merges.csv.gz")
 SYNTHETIC_FILE = Path("data/synthetic_2024_cars.csv")
 
 

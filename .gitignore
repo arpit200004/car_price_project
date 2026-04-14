@@ -38,8 +38,7 @@ ENV/
 .vscode/
 
 # Project specific
-*.pkl
-data/used-cars-dataset-cardekho/
-*.csv
-!data/synthetic_2024_cars.csv
-*.png
+# Models and data are required by Streamlit Cloud to run inference
+# Do not ignore .pkl or data/ folder, but explicitly exclude massive raw CSVs
+data/used-cars-dataset-cardekho/*.csv
+!data/used-cars-dataset-cardekho/*.gz
