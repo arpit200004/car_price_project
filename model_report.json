@@ -1,0 +1,57 @@
+{
+  "data_file": "data/used-cars-dataset-cardekho/cars_details_merges.csv",
+  "dataset_name": "Kaggle Cardekho detailed used cars dataset (calibrated)",
+  "training_rows": 35717,
+  "feature_columns": [
+    "brand",
+    "model",
+    "car_name",
+    "seller_type",
+    "fuel_type",
+    "transmission_type",
+    "owner_type",
+    "body_type",
+    "drive_type",
+    "car_age",
+    "km_driven",
+    "km_per_year",
+    "mileage",
+    "engine_cc",
+    "max_power",
+    "max_torque",
+    "seats",
+    "length",
+    "width",
+    "height"
+  ],
+  "selected_model_name": "gradient_boosting_regressor",
+  "candidate_metrics": {
+    "hist_gradient_boosting": {
+      "mae": 76021.93469077299,
+      "mape": 13.08961473861448,
+      "median_ape": 9.489563072455761,
+      "median_ae": 47691.26936875764,
+      "rmse": 129382.76514155338,
+      "r2": 0.9566040031743671,
+      "bias": -6192.520351378416
+    },
+    "gradient_boosting_regressor": {
+      "mae": 73892.281996795,
+      "mape": 12.969449111901751,
+      "median_ape": 9.206420478800565,
+      "median_ae": 47736.30829064106,
+      "rmse": 125231.75945172658,
+      "r2": 0.9593438943576872,
+      "bias": -5453.280756313199
+    },
+    "extra_trees_regressor": {
+      "mae": 75545.77747433685,
+      "mape": 13.283113600204436,
+      "median_ape": 9.490837345489062,
+      "median_ae": 47953.439800413675,
+      "rmse": 130241.30956132579,
+      "r2": 0.9560261672439909,
+      "bias": -9459.513570961075
+    }
+  }
+}
