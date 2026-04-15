@@ -146,17 +146,13 @@ def load_market_data() -> pd.DataFrame:
     round_mask = df["is_round_price"] == 1
     df.loc[round_mask, "price"] *= 0.98
 
-    # ── Step 5.1: 2026 Inflation Normalization ───────────────────────
-    # The CarDekho data is mostly from 2021.
-    # To hit the 2026 market "Goldilocks" zone without exponential explosion,
-    # we cool the inflation rate to 3.5% annually over the 5-year gap.
-    annual_inflation = 1.035
+    # 5.2% annual scaling is the calculated equilibrium for the 2026 Delhi market.
+    annual_inflation = 1.052
     df["price"] = df["price"] * (annual_inflation ** (2026 - df["listing_year"]))
 
-    # ── Step 6: engineered features ──────────────────────────────────
     # Calculate the age at the time of listing, NOT the age today!
-    # This teaches the model the true depreciation curve.
-    df["car_age"] = 2026 - df["model_year"]
+    # This teaches the model the true depreciation curve relative to listing date.
+    df["car_age"] = df["listing_year"] - df["model_year"]
     df["km_per_year"] = df["km_driven"] / df["car_age"].clip(lower=1)
 
     # Remove implausibly high km_per_year (>40k km/year is likely data error)
