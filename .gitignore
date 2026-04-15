@@ -39,6 +39,11 @@ ENV/
 
 # Project specific
 # Models and data are required by Streamlit Cloud to run inference
-# Do not ignore .pkl or data/ folder, but explicitly exclude massive raw CSVs
-data/used-cars-dataset-cardekho/*.csv
-!data/used-cars-dataset-cardekho/*.gz
+# Do not ignore models/ or processed data, but explicitly exclude massive raw CSVs
+data/raw/used-cars-dataset-cardekho/*.csv
+!data/raw/used-cars-dataset-cardekho/*.gz
+
+# Allow results/reports
+!reports/*.json
+!reports/*.png
+!models/*.pkl

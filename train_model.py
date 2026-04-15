@@ -16,11 +16,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder
 
-from model_data import DATA_FILE, load_market_data
+from src.data_loader import DATA_FILE, load_market_data
 
 
-MODEL_FILE  = Path("car_price_model_v3.pkl")
-REPORT_FILE = Path("model_report.json")
+MODEL_FILE  = Path("models/car_price_model_v3.pkl")
+REPORT_FILE = Path("reports/model_report.json")
 
 CATEGORICAL_COLUMNS = [
     "brand",
@@ -173,7 +173,7 @@ def main() -> None:
         sns.heatmap(corr_matrix, annot=True, cmap="YlOrBr", fmt=".2f", linewidths=0.5)
         plt.title("Feature Correlation Heatmap")
         plt.tight_layout()
-        heatmap_path = "correlation_heatmap.png"
+        heatmap_path = "reports/correlation_heatmap.png"
         plt.savefig(heatmap_path)
         print(f"✅ Correlation Heatmap saved to '{heatmap_path}'\n")
     except ImportError:

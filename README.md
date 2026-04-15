@@ -11,9 +11,9 @@ A machine learning model that predicts the selling price of used cars based on f
 
 Below is a comparison of the different regression models tested during the development process. The **Random Forest Regressor** was selected as the final model due to its superior performance and robustness.
 
-| Model | R² Score (Train) | R² Score (Test) | MAE | RMSE |
+| Model | R² Score | MAPE | MAE | RMSE |
 | :--- | :---: | :---: | :---: | :---: |
-| **Random Forest Regressor** | **0.985** | **0.959** | **73,892** | **125,231** |
+| **Gradient Boosting** | **0.954** | **12.9%** | **₹1,00,407** | **₹1,74,040** |
 | Gradient Boosting | 0.972 | 0.956 | 76,021 | 129,383 |
 | Extra Trees | 0.980 | 0.956 | 75,545 | 130,241 |
 | Linear Regression | 0.882 | 0.851 | 142,500 | 210,300 |
@@ -51,8 +51,9 @@ To understand the relationships between various car features and the final selli
   - `km_driven` has a weak negative correlation, as higher mileage typically indicates more wear.
   - No severe multicollinearity was detected between independent features, ensuring stable model training.
 - **Why it matters**: This analysis guided the selection of key drivers and confirmed which variables were redundant or most critical for accuracy.
+- **Location**: Found in `reports/correlation_heatmap.png`.
 
-![Correlation Heatmap](images/correlation_heatmap.png)
+![Correlation Heatmap](reports/correlation_heatmap.png)
 
 ## 🚀 Key Features
 
@@ -67,10 +68,15 @@ To understand the relationships between various car features and the final selli
 
 ```text
 car_price_project/
-├── car_price_prediction.ipynb   # Main Jupyter Notebook
-├── car data.csv                  # CarDekho dataset
-├── images/
-│   └── correlation_heatmap.png  # Heatmap visualization
+├── data/
+│   ├── raw/                 # Original CarDekho dataset
+│   └── processed/           # Synthetic 2024 generated data
+├── models/                  # Saved .pkl model files
+├── reports/                 # Training metrics and visualization plots
+├── src/                     # Core logic (Data loading & preprocessing)
+├── scripts/                 # Utility scripts (Data augmentation)
+├── app.py                   # Streamlit Web Application
+├── train_model.py           # Model Training Pipeline
 ├── requirements.txt
 └── README.md
 ```
@@ -90,13 +96,15 @@ Follow these steps to set up the project locally:
    pip install -r requirements.txt
    ```
 
-3. **Open Jupyter Notebook**:
+3. **Run the Application**:
    ```bash
-   jupyter notebook car_price_prediction.ipynb
+   streamlit run app.py
    ```
 
-4. **Run the model**:
-   Execute all cells in the notebook to reproduce the training and evaluation results.
+4. **Retrain the model** (Optional):
+   ```bash
+   python3 train_model.py
+   ```
 
 ## 📈 How the Model Works
 

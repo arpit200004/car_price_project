@@ -13,9 +13,9 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-from model_data import load_market_data
+from src.data_loader import load_market_data
 
-MODEL_PATH = Path("car_price_model_v3.pkl")
+MODEL_PATH = Path("models/car_price_model_v3.pkl")
 
 SPEC_COLS = [
     "mileage", "engine_cc", "max_power", "max_torque",
