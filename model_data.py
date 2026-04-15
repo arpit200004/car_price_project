@@ -27,14 +27,11 @@ def clean_text(series: pd.Series) -> pd.Series:
 
 
 # ────────────────────────────────────────────────
-#  Price calibration: CarDekho prices are dealer
-#  asking prices. We apply a small markdown to
-#  bring them closer to actual transaction prices.
-#  Research shows Indian used car transaction prices
-#  average ~8% below the listed/asking price.
+#  Price calibration: We predict the ASK/LISTING 
+#  price to ensure the highest possible valuation.
 # ────────────────────────────────────────────────
-DEALER_DISCOUNT    = 0.95   # dealer listings: 5% markdown (precision balanced)
-INDIVIDUAL_DISCOUNT = 0.97  # individual listings: 3% markdown (precision balanced)
+DEALER_DISCOUNT    = 1.00 # Zero-Markdown strategy
+INDIVIDUAL_DISCOUNT = 1.00 # Zero-Markdown strategy
 
 
 def load_market_data() -> pd.DataFrame:
@@ -127,29 +124,10 @@ def load_market_data() -> pd.DataFrame:
         & df["height"].between(1200, 2_200)
     ].copy()
 
-    # ── Step 4: remove purely round-number prices (likely fake listings)
-    # Prices that are exact multiples of ₹50,000 with no decimals are
-    # overwhelmingly aspirational asking prices, not transaction values.
-    # We keep them but flag suspicious ones to down-weight later.
-    df["is_round_price"] = (df["price_raw"] % 50_000 == 0).astype(int)
-
-    # ── Step 5: calibrate asking → transaction price ─────────────────
-    # Dealers in India typically negotiate 8-12% off the asking price.
-    # Individual sellers negotiate ~3% off. We apply conservative discounts.
-    dealer_mask = df["seller_type"] == "dealer"
-    # For round prices (likely inflated aspirational), apply an extra 2% haircut
-    df["price"] = df["price_raw"].astype(float).copy()
-    df.loc[dealer_mask,  "price"] = df.loc[dealer_mask,  "price_raw"].astype(float) * DEALER_DISCOUNT
-    df.loc[~dealer_mask, "price"] = df.loc[~dealer_mask, "price_raw"].astype(float) * INDIVIDUAL_DISCOUNT
-
-    # For round prices (likely inflated aspirational), apply an extra 2% haircut
-    round_mask = df["is_round_price"] == 1
-    df.loc[round_mask, "price"] *= 0.98
-
-    # ── Step 5.1: 2024 Inflation Normalization ───────────────────────
-    # We apply a 5.5% annual inflation factor from the listing year.
-    annual_inflation = 1.055
-    df["price"] = df["price"] * (annual_inflation ** (2024 - df["listing_year"]))
+    # ── Step 5: Listing Price Normalization ──────────────────────────
+    # Predicting asking prices with a 6.0% annual inflation factor.
+    annual_inflation = 1.06
+    df["price"] = df["price_raw"].astype(float) * (annual_inflation ** (2024 - df["listing_year"]))
 
     # Calculate the age at the time of listing, NOT the age today!
     # This teaches the model the true depreciation curve relative to listing date.

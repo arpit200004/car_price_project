@@ -399,9 +399,9 @@ def main():
         </div>
         <div class="step">
             <div class="snum c1">6</div>
-            <h4>Feature Engineering &amp; Training</h4>
-            <p>We compute <code>car_age</code> (2024 − year) and <code>km_per_year</code> (km ÷ age)
-               to capture depreciation and usage intensity. Price is log-transformed (<code>log1p</code>).</p>
+            <h4>Predictive Modeling</h4>
+            <p>We use Gradient Boosting to predict the <b>Full Listing Value</b> based on 
+               historical trends and market inflation (6.0% annually). No discounts are applied.</p>
         </div>
     </div>""", unsafe_allow_html=True)
 

@@ -182,21 +182,14 @@ def main() -> None:
     X  = df[FEATURE_COLUMNS].copy()
     y  = np.log1p(df[TARGET_COLUMN].copy())
 
-    # Down-weight round-priced rows — less reliable ground truth
-    sample_weight = np.where(df["is_round_price"] == 1, 0.7, 1.0)
-
-    X_train, X_test, y_train, y_test, w_train, _ = train_test_split(
-        X, y, sample_weight, test_size=0.2, random_state=42
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
     )
 
     candidate_metrics: dict[str, dict[str, float]] = {}
     for name, pipeline in build_candidates().items():
         print(f"Training {name}...")
-        # HistGradientBoosting supports sample_weight natively
-        try:
-            pipeline.fit(X_train, y_train, model__sample_weight=w_train)
-        except TypeError:
-            pipeline.fit(X_train, y_train)
+        pipeline.fit(X_train, y_train)
 
         preds = np.expm1(pipeline.predict(X_test))
         candidate_metrics[name] = evaluate_predictions(np.expm1(y_test), preds)
@@ -209,10 +202,7 @@ def main() -> None:
 
     # Retrain winner on 100% of data
     final_model = build_candidates()[winner_name]
-    try:
-        final_model.fit(X, y, model__sample_weight=sample_weight)
-    except TypeError:
-        final_model.fit(X, y)
+    final_model.fit(X, y)
 
     bundle = {
         "model":              final_model,
