@@ -8,35 +8,32 @@ with open('car_price_model_v3.pkl', 'rb') as f:
 
 model = bundle['model']
 
-# 2023 Maruti Suzuki Ertiga ZXi Plus Petrol (Manual)
-# Actual Price in Delhi (2026 check on 2023 model): Rs. 9.8 Lakh
+# 2017 Maruti Suzuki Vitara Brezza (Diesel, Manual)
+# This car is 7 years old in our new 2024 baseline.
 row = pd.DataFrame([{
     "brand": "maruti",
-    "model": "maruti ertiga",
-    "car_name": "maruti ertiga zxi plus", # matches cleaned variant logic
+    "model": "maruti vitara brezza",
+    "car_name": "maruti vitara brezza vdi",
     "seller_type": "dealer",
-    "fuel_type": "petrol",
+    "fuel_type": "diesel",
     "transmission_type": "manual",
     "owner_type": "first",
-    "body_type": "muv",
-    "drive_type": "2wd",
-    "car_age": float(2026 - 2023), # Age 3 in 2026
-    "km_driven": 43000.0,
-    "km_per_year": 43000.0 / 3.0,
-    "mileage": 20.5, # approx
-    "engine_cc": 1462.0,
-    "max_power": 101.65,
-    "max_torque": 136.8,
-    "seats": 7.0,
-    "length": 4395.0,
-    "width": 1735.0,
-    "height": 1690.0
+    "body_type": "suv",
+    "drive_type": "fwd",
+    "car_age": float(2024 - 2017), # Age 7 in 2024
+    "km_driven": 60000.0,
+    "km_per_year": 60000.0 / 7.0,
+    "mileage": 24.3,
+    "engine_cc": 1248.0,
+    "max_power": 88.5,
+    "max_torque": 200.0,
+    "seats": 5.0,
+    "length": 3995.0,
+    "width": 1790.0,
+    "height": 1640.0
 }])
 
 prediction = model.predict(row)[0]
-# Inverse log transform if needed? No, the pipeline handles it (assuming it's in the pipeline)
-# Wait, let's check train_model.py again to see if log transform is in the pipeline or manual.
-# In app.py, it calls model.predict(row).
 price = np.expm1(prediction)
 
-print(f"Predicted Price: ₹{price:,.0f}")
+print(f"Predicted Price (2017 Brezza in 2024): ₹{price:,.0f}")

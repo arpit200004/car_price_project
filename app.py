@@ -400,7 +400,7 @@ def main():
         <div class="step">
             <div class="snum c1">6</div>
             <h4>Feature Engineering &amp; Training</h4>
-            <p>We compute <code>car_age</code> (2026 − year) and <code>km_per_year</code> (km ÷ age)
+            <p>We compute <code>car_age</code> (2024 − year) and <code>km_per_year</code> (km ÷ age)
                to capture depreciation and usage intensity. Price is log-transformed (<code>log1p</code>).</p>
         </div>
     </div>""", unsafe_allow_html=True)
@@ -436,7 +436,7 @@ def main():
         with st.form("est_form"):
             c1, c2 = st.columns(2)
             with c1:
-                reg_year = st.number_input("Registration year", 1990, 2026,
+                reg_year = st.number_input("Registration year", 1990, 2024,
                     int(round(prof["def_year"])), step=1)
             with c2:
                 km = st.number_input("Kilometers driven", 0, 500000, 0, step=1000)
@@ -455,7 +455,7 @@ def main():
             go = st.form_submit_button("Estimate price", width="stretch")
 
         if go:
-            car_age = max(2026 - reg_year, 1)
+            car_age = max(2024 - reg_year, 1)
             km_val = float(km)
             row = pd.DataFrame([{
                 "brand": cur_brand, "model": cur_model, "car_name": cur_variant,

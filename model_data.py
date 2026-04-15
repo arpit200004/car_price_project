@@ -7,7 +7,7 @@ import pandas as pd
 
 
 DATA_FILE = Path("data/used-cars-dataset-cardekho/cars_details_merges.csv.gz")
-SYNTHETIC_FILE = Path("data/synthetic_2026_cars.csv")
+SYNTHETIC_FILE = Path("data/synthetic_2024_cars.csv")
 
 
 def extract_first_number(series: pd.Series) -> pd.Series:
@@ -41,10 +41,10 @@ def load_market_data() -> pd.DataFrame:
     raw_main = pd.read_csv(DATA_FILE, low_memory=False)
     raw_main["listing_year"] = 2021
     
-    # ── Inject Modern 2025-2026 Cars ──
+    # ── Inject Modern 2023-2024 Cars ──
     try:
         raw_synth = pd.read_csv(SYNTHETIC_FILE, low_memory=False)
-        raw_synth["listing_year"] = 2026
+        raw_synth["listing_year"] = 2024
         raw = pd.concat([raw_main, raw_synth], ignore_index=True)
     except FileNotFoundError:
         raw = raw_main
@@ -116,7 +116,7 @@ def load_market_data() -> pd.DataFrame:
     df = df[
         df["price_raw"].between(60_000, price_cap)
         & df["km_driven"].between(500, km_cap)
-        & df["model_year"].between(2000, 2026)    # tighter: pre-2000 cars are rare & noisy
+        & df["model_year"].between(2000, 2024)    # tighter: pre-2000 cars are rare & noisy
         & df["mileage"].between(5, 35)             # tighter upper: >35kmpl is implausible for most cars
         & df["engine_cc"].between(500, 6_500)
         & df["max_power"].between(25, power_cap)
@@ -146,9 +146,10 @@ def load_market_data() -> pd.DataFrame:
     round_mask = df["is_round_price"] == 1
     df.loc[round_mask, "price"] *= 0.98
 
-    # 5.2% annual scaling is the calculated equilibrium for the 2026 Delhi market.
-    annual_inflation = 1.052
-    df["price"] = df["price"] * (annual_inflation ** (2026 - df["listing_year"]))
+    # ── Step 5.1: 2024 Inflation Normalization ───────────────────────
+    # We apply a 5.5% annual inflation factor from the listing year.
+    annual_inflation = 1.055
+    df["price"] = df["price"] * (annual_inflation ** (2024 - df["listing_year"]))
 
     # Calculate the age at the time of listing, NOT the age today!
     # This teaches the model the true depreciation curve relative to listing date.
