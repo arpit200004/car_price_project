@@ -10,6 +10,7 @@ from sklearn.ensemble import (
     ExtraTreesRegressor,
     GradientBoostingRegressor,
     HistGradientBoostingRegressor,
+    VotingRegressor,
 )
 from sklearn.metrics import mean_absolute_error, mean_squared_error, median_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
@@ -64,13 +65,62 @@ def build_preprocessor_ordinal() -> ColumnTransformer:
     )
 
 
+def build_hybrid_pipeline() -> Pipeline:
+    prep = build_preprocessor_ordinal()
+    
+    estimators = [
+        (
+            "hist_gb",
+            HistGradientBoostingRegressor(
+                max_iter=600,
+                max_depth=8,
+                learning_rate=0.06,
+                min_samples_leaf=20,
+                l2_regularization=0.1,
+                max_leaf_nodes=63,
+                early_stopping=True,
+                validation_fraction=0.1,
+                n_iter_no_change=30,
+                random_state=42,
+            ),
+        ),
+        (
+            "gradient_boosting",
+            GradientBoostingRegressor(
+                n_estimators=800,
+                max_depth=7,
+                learning_rate=0.08,
+                subsample=0.85,
+                min_samples_leaf=10,
+                max_features=0.7,
+                random_state=42,
+            ),
+        ),
+        (
+            "extra_trees",
+            ExtraTreesRegressor(
+                n_estimators=500,
+                min_samples_leaf=5,
+                max_depth=35,
+                max_features=0.6,
+                random_state=42,
+                n_jobs=-1,
+            ),
+        ),
+    ]
+
+    return Pipeline(
+        steps=[
+            ("preprocess", prep),
+            ("model", VotingRegressor(estimators=estimators, n_jobs=-1)),
+        ]
+    )
+
+
 def build_candidates() -> dict[str, Pipeline]:
     prep = build_preprocessor_ordinal()
 
     return {
-        # ─── Histogram Gradient Boosting ─────────────────────────────
-        # This is sklearn's fastest, most accurate tree booster.
-        # Naturally handles missing values and works very well with ordinal cats.
         "hist_gradient_boosting": Pipeline(
             steps=[
                 ("preprocess", prep),
@@ -84,48 +134,34 @@ def build_candidates() -> dict[str, Pipeline]:
                         l2_regularization=0.1,
                         max_leaf_nodes=63,
                         early_stopping=True,
-                        validation_fraction=0.1,
-                        n_iter_no_change=30,
                         random_state=42,
                     ),
                 ),
             ]
         ),
-        # ─── Gradient Boosting ────────────────────────────────────────
         "gradient_boosting_regressor": Pipeline(
             steps=[
                 ("preprocess", prep),
                 (
                     "model",
                     GradientBoostingRegressor(
-                        n_estimators=800,
-                        max_depth=7,
-                        learning_rate=0.08,
-                        subsample=0.85,
-                        min_samples_leaf=10,
-                        max_features=0.7,
-                        random_state=42,
+                        n_estimators=800, max_depth=7, learning_rate=0.08, random_state=42
                     ),
                 ),
             ]
         ),
-        # ─── ExtraTrees (very fast, good baseline) ────────────────────
         "extra_trees_regressor": Pipeline(
             steps=[
                 ("preprocess", prep),
                 (
                     "model",
                     ExtraTreesRegressor(
-                        n_estimators=500,
-                        min_samples_leaf=5,
-                        max_depth=35,
-                        max_features=0.6,
-                        random_state=42,
-                        n_jobs=-1,
+                        n_estimators=500, max_depth=35, random_state=42, n_jobs=-1
                     ),
                 ),
             ]
         ),
+        "hybrid_voting_ensemble": build_hybrid_pipeline(),
     }
 
 
@@ -200,8 +236,8 @@ def main() -> None:
     winner_name = min(candidate_metrics, key=lambda n: candidate_metrics[n]["mape"])
     print(f"\nWinner: {winner_name}")
 
-    # Retrain winner on 100% of data
-    final_model = build_candidates()[winner_name]
+    # Retrain Hybrid on 100% of data for production
+    final_model = build_hybrid_pipeline()
     final_model.fit(X, y)
 
     bundle = {
