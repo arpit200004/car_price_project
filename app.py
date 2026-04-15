@@ -12,8 +12,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
-
 from src.data_loader import load_market_data
+import joblib
 
 MODEL_PATH = Path("models/car_price_model_v3.pkl")
 
@@ -67,8 +67,7 @@ def get_data():
 @st.cache_resource(show_spinner=False)
 def get_bundle():
     # reload model bundle v4
-    with MODEL_PATH.open("rb") as f:
-        return pickle.load(f)
+    return joblib.load(MODEL_PATH)
 
 # ── vehicle profile ──
 

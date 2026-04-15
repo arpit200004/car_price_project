@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
-import pickle
+import joblib
 
 import numpy as np
 from sklearn.compose import ColumnTransformer
@@ -72,37 +72,29 @@ def build_hybrid_pipeline() -> Pipeline:
         (
             "hist_gb",
             HistGradientBoostingRegressor(
-                max_iter=600,
-                max_depth=8,
-                learning_rate=0.06,
-                min_samples_leaf=20,
+                max_iter=150,
+                max_depth=6,
+                learning_rate=0.08,
                 l2_regularization=0.1,
-                max_leaf_nodes=63,
+                max_leaf_nodes=31,
                 early_stopping=True,
-                validation_fraction=0.1,
-                n_iter_no_change=30,
                 random_state=42,
             ),
         ),
         (
             "gradient_boosting",
             GradientBoostingRegressor(
-                n_estimators=800,
-                max_depth=7,
-                learning_rate=0.08,
-                subsample=0.85,
-                min_samples_leaf=10,
-                max_features=0.7,
+                n_estimators=150,
+                max_depth=5,
+                learning_rate=0.1,
                 random_state=42,
             ),
         ),
         (
             "extra_trees",
             ExtraTreesRegressor(
-                n_estimators=500,
-                min_samples_leaf=5,
-                max_depth=35,
-                max_features=0.6,
+                n_estimators=100,
+                max_depth=15,
                 random_state=42,
                 n_jobs=-1,
             ),
@@ -127,14 +119,7 @@ def build_candidates() -> dict[str, Pipeline]:
                 (
                     "model",
                     HistGradientBoostingRegressor(
-                        max_iter=600,
-                        max_depth=8,
-                        learning_rate=0.06,
-                        min_samples_leaf=20,
-                        l2_regularization=0.1,
-                        max_leaf_nodes=63,
-                        early_stopping=True,
-                        random_state=42,
+                        max_iter=150, max_depth=6, random_state=42
                     ),
                 ),
             ]
@@ -145,7 +130,7 @@ def build_candidates() -> dict[str, Pipeline]:
                 (
                     "model",
                     GradientBoostingRegressor(
-                        n_estimators=800, max_depth=7, learning_rate=0.08, random_state=42
+                        n_estimators=150, max_depth=5, random_state=42
                     ),
                 ),
             ]
@@ -156,7 +141,7 @@ def build_candidates() -> dict[str, Pipeline]:
                 (
                     "model",
                     ExtraTreesRegressor(
-                        n_estimators=500, max_depth=35, random_state=42, n_jobs=-1
+                        n_estimators=100, max_depth=15, random_state=42, n_jobs=-1
                     ),
                 ),
             ]
@@ -254,8 +239,7 @@ def main() -> None:
         "price_calibrated":   True,
     }
 
-    with MODEL_FILE.open("wb") as fh:
-        pickle.dump(bundle, fh)
+    joblib.dump(bundle, MODEL_FILE, compress=9)
 
     report = {
         "data_file":          str(DATA_FILE),
