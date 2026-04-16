@@ -1,6 +1,6 @@
 """
 DriveValue — used-car price estimator for the Indian market.
-Built on top of a CarDekho-trained ExtraTrees / RandomForest pipeline.
+Built on top of a CarDekho-trained Hybrid Voting Ensemble (HistGB / GBR / ExtraTrees).
 """
 
 from html import escape
@@ -398,9 +398,10 @@ def main():
         </div>
         <div class="step">
             <div class="snum c1">6</div>
-            <h4>Predictive Modeling</h4>
-            <p>We use Gradient Boosting to predict the <b>Full Listing Value</b> based on 
-               historical trends and market inflation (6.0% annually). No discounts are applied.</p>
+            <h4>Hybrid Predictive Engine</h4>
+            <p>We use a <b>Hybrid Voting Ensemble</b> that averages predictions from three distinct models:
+               <b>HistGradientBoosting</b>, <b>Gradient Boosting</b>, and <b>Extra Trees</b>. This consensus
+               approach ensures stable, high-value valuations by balancing different machine learning perspectives.</p>
         </div>
     </div>""", unsafe_allow_html=True)
 
