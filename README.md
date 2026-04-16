@@ -1,9 +1,9 @@
 # 🤖 Car Price Prediction: Hybrid Ensemble Engine
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-%23FF4B4B.svg?logo=Streamlit&logoColor=white)](https://streamlit.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-%23FF4B4B.svg?logo=Streamlit&logoColor=white)](https://drivevalue.streamlit.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## 🌐 [View Live Demo](https://drivevalue.streamlit.app/)
 
 A high-performance machine learning pipeline designed to estimate used car prices in the Indian market. This project utilizes a **Hybrid Voting Ensemble**—combining the strengths of three different gradient-boosted and tree-based algorithms—to deliver stable, high-value listing estimates.
 
